@@ -4,9 +4,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>vue-do</title>
+    <base href="/">
   </head>
   <body>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCGm7yJsCs2RBpSbV9oeGYCLq22ZLUE6Ic",
+        authDomain: "vuedo-app.firebaseapp.com",
+        databaseURL: "https://vuedo-app.firebaseio.com",
+        projectId: "vuedo-app",
+        storageBucket: "vuedo-app.appspot.com",
+        messagingSenderId: "1075463760674"
+      };
+      firebase.initializeApp(config);
+    </script>
   </body>
 </html>
