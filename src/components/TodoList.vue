@@ -1,17 +1,18 @@
 <template>
   <div>
       <input type="text" class="todo-input" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo">
-
-    <transition-group enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
+<!--animate css transition tag-->
+<transition-group enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
+  <!--loop over todo array-->
     <div v-for="(todo, index) in filteredTodos" :key="todo.id" class="todo-item">
 
       <div class="todo-l">
           <input type="checkbox" v-model="todo.completed">
-
+    <!--double click to enter edit mode-->
           <div class="todo-label" v-if="!todo.editMode" @dblclick="editTodo(todo)" :class="{ done : todo.completed}">
             {{ todo.title }}
           </div>
-
+    <!--press escape key to cancel edit and return to original input-->
           <input type="text" class="todo-edit" v-model="todo.title" v-focus v-else @blur="doneEdit(todo)" @keyup="doneEdit(todo)" @keyup.esc="cancelEdit(todo)">
       </div>
       <!--end todo-l-->
