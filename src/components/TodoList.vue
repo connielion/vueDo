@@ -1,6 +1,14 @@
 <template>
   <div>
+      <h3>This is a to-do app made with Vue.js, Sass, Animate.css.</h3>
+      <h4>It's my first Vue.js project. <a href="https://connielion.com/" target=_blank>My website.</a></h4>
+      <ul class="list">
+        <li>Press 'Enter/return' key to add todo item. Empty input will NOT be entered.</li>
+        <li>Double-click on item to edit.</li>
+        <li>You can filter items using the 'all', 'active' for incompleted items, and 'completed' button at the bottom.</li>
+      </ul>
       <input type="text" class="todo-input" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo">
+      <button @click="addTodo" class="addbtn">Add</button>
 <!--animate css transition tag-->
 <transition-group enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
   <!--loop over todo array-->
@@ -31,7 +39,7 @@
 
             <div class="count-container">
               <div>
-                <button :class="{ active: filter == 'all'}" @click="filter = 'completed'">All</button>
+                <button :class="{ active: filter == 'all'}" @click="filter = 'all'">All</button>
                 <button :class="{ active: filter == 'active'}" @click="filter = 'active'">Active</button>
                 <button :class="{ active: filter == 'completed'}" @click="filter = 'completed'">Completed</button>
               </div>
@@ -64,7 +72,7 @@ export default {
       },
       {
         'id': 2,
-        'title': 'learn vue',
+        'title': 'learn web development',
         'completed': false,
         'editMode': false,
       }
@@ -156,6 +164,8 @@ export default {
     width: 100%;
     padding: 10px 18px;
     font-size: 18px;
+    border: 1px solid lightgreen;
+    border-radius: 4px;
     margin-bottom: 16px;
 
     &:focus {
@@ -220,7 +230,8 @@ export default {
   }
 
   .active {
-    background: lightgreen;
+    background: rgb(56, 94, 150);
+    color: #fff;
   }
 
   .fade-enter-active, .fade-leave-active {
@@ -230,4 +241,20 @@ export default {
   .fade-enter, .fade-leave-to {
     opacity: 0;
   }
+  .list {
+    font-family: 'Arial';
+    font-size: 14px;
+    list-style-type: none;
+  }
+  button {
+    border: 1px solid black;
+    border-radius: 4px;
+    font-size: 18px;
+    background: lightcyan;
+  }
+  .addbtn {
+    background: rgb(56, 94, 150);
+    color: #fff;
+  }
+
 </style>
