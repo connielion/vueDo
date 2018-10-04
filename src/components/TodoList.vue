@@ -2,13 +2,18 @@
   <div>
       <h3>This is a to-do app made with Vue.js, Sass, Animate.css.</h3>
       <h4>It's my first Vue.js project. <a href="https://connielion.com/" target=_blank>My website.</a></h4>
-      <ul class="list">
+
+      <ol class="list">
         <li>Press 'Enter/return' key to add todo item. Empty input will NOT be entered.</li>
         <li>Double-click on item to edit.</li>
+        <li>Press 'Escape' key to cancel edit.</li>
         <li>You can filter items using the 'all', 'active' for incompleted items, and 'completed' button at the bottom.</li>
-      </ul>
-      <input type="text" class="todo-input" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo">
+      </ol>
+
+      <input type="text" class="todo-input" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo" autofocus>
+
       <button @click="addTodo" class="addbtn">Add</button>
+
 <!--animate css transition tag-->
 <transition-group enter-active-class="animated fadeInUp" leave-active-class="animated fadeOutDown">
   <!--loop over todo array-->
@@ -16,11 +21,12 @@
 
       <div class="todo-l">
           <input type="checkbox" v-model="todo.completed">
-    <!--double click to enter edit mode-->
-          <div class="todo-label" v-if="!todo.editMode" @dblclick="editTodo(todo)" :class="{ done : todo.completed}">
+    <!--label: double click to enter edit mode-->
+          <label class="todo-label" v-if="!todo.editMode" @dblclick="editTodo(todo)" :class="{ done : todo.completed}">
             {{ todo.title }}
-          </div>
+          </label>
     <!--press escape key to cancel edit and return to original input-->
+
           <input type="text" class="todo-edit" v-model="todo.title" v-focus v-else @blur="doneEdit(todo)" @keyup="doneEdit(todo)" @keyup.esc="cancelEdit(todo)">
       </div>
       <!--end todo-l-->
@@ -55,6 +61,8 @@
 </template>
 
 <script>
+const STORAGE_KEY = 'todo-storage';
+
 export default {
   name: 'todo-list',
   data () {
@@ -63,20 +71,7 @@ export default {
       todoID: 3,
       filter: 'all',
       beforeEditCache: '',
-      todos: [
-        {
-        'id': 1,
-        'title': 'shopping',
-        'completed': false,
-        'editMode': false,
-      },
-      {
-        'id': 2,
-        'title': 'learn web development',
-        'completed': false,
-        'editMode': false,
-      }
-      ]
+      todos: [],
     }
   },
   computed: { // no data mutation, no param
@@ -112,32 +107,39 @@ export default {
       }
     }
 },
+/* created() {
+  this.todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+},*/
   methods: {
+    // add todo item
     addTodo() {
-
       // check if input is empty
       if (this.newTodo.trim().length == 0) {
           return;
       }
-      this.todos.push({
+      this.todos.push({ // push
         id: this.todoID,
         title: this.newTodo,
         completed: false,
 
       })
       this.newTodo='';
-      this.todoID++
+      this.todoID++;
+      // localStorage.setItem(STORAGE_KEY, JSON.stringify(this.todos));
     },
+    // edit todo
     editTodo(todo) {
       this.beforeEditCache = todo.title;
       todo.editMode = true;
     },
+    // turn off edit mode
     doneEdit(todo) {
           if (todo.title.trim() == '') {
          todo.title = this.beforeEditCache
       }
         todo.editMode = false;
     },
+    // cancel edit
     cancelEdit(todo) {
         todo.title = this.beforeEditCache;
         todo.editMode = false;
@@ -146,19 +148,29 @@ export default {
     removeTodo(index) {
       this.todos.splice(index, 1)
     },
+    // check all items
     checkAll() {
       this.todos.forEach((todo) => todo.completed = event.target.checked);
     },
+    // clear completed list
     clearCompleted() {
       this.todos = this.todos.filter(todo => !todo.completed)
     }
 
-  }
+
+
+  } // end methods
 }
 </script>
 
+
+
+
+
+
 <style lang="scss">
 @import url("https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.css");
+@import url('https://fonts.googleapis.com/css?family=Schoolbell');
 
   .todo-input {
     width: 100%;
@@ -179,6 +191,12 @@ export default {
     align-items: center;
     justify-content: space-between;
     animation-duration: .3s;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 5px;
+    margin-top: 5px;
+    font-size: 16px;
+    font-family: 'Schoolbell', cursive;
   }
 
   .remove {
@@ -187,6 +205,9 @@ export default {
 
     &:hover {
       color: red;
+      font-weight: bold;
+      border: 1px solid black;
+      border-radius: 50%;
     }
   }
   .todo-l {
